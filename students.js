@@ -1,4 +1,4 @@
-let data = d3.json("limited_data.json")
+let data = d3.json("students.json")
     .then(function (data) {
 
         let groups = d3.rollup(data,
@@ -15,7 +15,7 @@ let data = d3.json("limited_data.json")
         });
 
         var treemapLayout = d3.treemap();
-        treemapLayout.size([1000, 500]).paddingTop(20);
+        treemapLayout.size([1200, 600]).paddingTop(20);
         treemapLayout.tile(d3.treemapBinary);
 
         treemapLayout(root);
@@ -51,7 +51,7 @@ let data = d3.json("limited_data.json")
             .attr('dx', 4)
             .attr('dy', 14)
             .text(function (d) {
-                return d["value"]>=140 ? d["data"][0] : "";
+                return d["value"]>=2000 ? d["data"][0] : "";
             })
 
     })
