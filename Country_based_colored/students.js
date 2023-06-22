@@ -32,26 +32,47 @@ let data = d3.json("students.json")
             .append('rect')
             .attr('width', function (d) { return d.x1 - d.x0; })
             .attr('height', function (d) { return d.y1 - d.y0; })
-            .attr('fill', function (d) { 
-                if(d['data'][0] === "Bulgaria"){
+            .attr('fill', function (d) {
+                if (d['data'][0] === "Bulgaria") {
                     return "green";
-                }else if(d['data'][0] === "Turkey"){
+                } else if (d['data'][0] === "Turkey") {
                     return "red";
-                }else if(d['data'][0] === "Russia"){
+                } else if (d['data'][0] === "Russia") {
                     return "yellow";
-                }else if(d['data'][0] === "Ukraine"){
+                } else if (d['data'][0] === "Ukraine") {
                     return "Orange";
-                }else if(d['data'][0] === "Greece"){
+                } else if (d['data'][0] === "Greece") {
                     return "blue";
                 }
             })
+        nodes.append("title").text(function (d) {
+            if (d["height"] === 3) {
+                return "Number: " + d["value"]
+            }
+            else if (d["height"] === 2) {
+                return "Domicile: " + d["data"][0] + "\n" +
+                    "Number: " + d["value"]
+            }
+            else if (d["height"] === 1) {
+                return "Domicile: " + d["parent"]["data"][0] + "\n" +
+                    "Level of study: " + d["data"][0] + "\n" +
+                    "Number: " + d["value"]
+            }
+            else if (d["height"] === 0) {
+                return "Domicile: " + d["parent"]["parent"]["data"][0] + "\n" +
+                    "Level of study: " + d["parent"]["data"][0] + "\n" +
+                    "Region of HE provider: " + d["data"][0] + "\n" +
+                    "Number: " + d["value"]
+            }
+        })
+
 
         nodes
             .append('text')
             .attr('dx', 4)
             .attr('dy', 14)
             .text(function (d) {
-                return d["value"]>=2000 ? d["data"][0] : "";
+                return d["value"] >= 2000 ? d["data"][0] : "";
             })
 
     })

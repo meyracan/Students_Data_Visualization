@@ -1,0 +1,9 @@
+rect {
+    opacity: 1;
+    stroke: white;
+  }
+  text {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    fill: white;
+    font-size: 10px;
+  }
