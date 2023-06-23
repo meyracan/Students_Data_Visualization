@@ -28,33 +28,70 @@ let data = d3.json("students.json")
             .join('g')
             .attr('transform', function (d) { return 'translate(' + [d.x0, d.y0] + ')' })
 
-        var rects = 
-        nodes
-            .append('rect')
-            .attr('width', function (d) { return d.x1 - d.x0; })
-            .attr('height', function (d) { return d.y1 - d.y0; })
+        var rects =
+            nodes
+                .append('rect')
+                .attr('width', function (d) { return d.x1 - d.x0; })
+                .attr('height', function (d) { return d.y1 - d.y0; })
 
-        var maxValue = d3.max(root.leaves(), (d)=>{return d["value"]})
-        var minValue = d3.min(root.leaves(), (d)=>{return d["value"]})
-        
+        var maxValue = d3.max(root.leaves(), (d) => { return d["value"] })
+        var minValue = d3.min(root.leaves(), (d) => { return d["value"] })
+
         let color = d3.scaleLinear()
-                            .range(['yellow', 'red'])
-                            .domain([minValue, maxValue]);
-        
-        let levelOfstudyColor = d3.scaleLinear()
-                            .range(['lightblue', 'mediumblue'])
-                            .domain([minValue, maxValue]);
+            .range(['yellow', 'red'])
+            .domain([minValue, maxValue]);
 
+        let levelOfstudyColor = d3.scaleLinear()
+            .range(['lightblue', 'mediumblue'])
+            .domain([minValue, maxValue]);
 
         rects
-        .attr("fill", function(d){
-            if(d["height"]>1)
-            return "grey"
-            if(d["height"]==1)
-            return levelOfstudyColor(d["value"])
-            else
-            return color(d["value"])
-        })
+            .attr("fill", function (d) {
+                if (d["height"] > 1)
+                    return "grey"
+                if (d["height"] == 1)
+                    return levelOfstudyColor(d["value"])
+                else
+                    return color(d["value"])
+            })
+
+        let colorbar = d3.select("#colorbar")
+            .attr("height", 50)
+            .attr("width", 500)
+            .style("margin-top", 10)
+            .style("background-color", "white")
+        let grad = d3.select("#linearGradient")
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%")
+        grad.append("stop")
+            .attr("id", "linearGradient")
+            .attr("offset", "0%")
+            .style("stop-color", () => { return color(minValue) })
+            .style("stop-opacity", "1")
+        grad.append("stop")
+            .attr("offset", "100%")
+            .style("stop-color", () => { return color(maxValue) })
+            .style("stop-opacity", "1")
+        colorbar.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 400)
+            .attr("height", 20)
+            .style("opacity", 1)
+            .attr("fill", "url(#linearGradient)")
+        colorbar.append("text")
+            .attr("x", 0)
+            .attr("y", 30)
+            .style("fill", "black")
+            .text("min")
+        colorbar.append("text")
+            .attr("x", 380)
+            .attr("y", 30)
+            .style("fill", "black")
+            .text("max")
+
 
         nodes.append("title").text(function (d) {
             if (d["height"] === 3) {
@@ -76,7 +113,7 @@ let data = d3.json("students.json")
                     "Number: " + d["value"]
             }
         })
-        
+
 
         nodes
             .append('text')
@@ -85,6 +122,9 @@ let data = d3.json("students.json")
             .text(function (d) {
                 return d["value"] >= 2000 ? d["data"][0] : "";
             })
+
+
+
 
     })
 
